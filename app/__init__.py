@@ -27,3 +27,5 @@ def create_app(config_class=Config):
         db.create_all()  # Create tables for Users, Jobs, etc.
         
     return app
+
+app = create_app()
