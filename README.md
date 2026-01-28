@@ -71,7 +71,7 @@ Career Grid streamlines the placement process by providing distinct portals for 
    ```
 4. **Start Command**:
    ```bash
-   gunicorn wsgi:app
+   gunicorn app:app
    ```
 5. **Database**: Render uses an ephemeral filesystem. For production, consider connecting to a Managed PostgreSQL instance or using a persistent disk if you want to keep the SQLite `instance/` folder.
 
