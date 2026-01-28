@@ -61,6 +61,20 @@ Career Grid streamlines the placement process by providing distinct portals for 
    ```
    Visit `http://127.0.0.1:5000` in your browser.
 
+## ☁️ Deployment (Render)
+
+1. **Create a Web Service**: Connect your GitHub repository to Render.
+2. **Environment**: Select `Python` as the environment.
+3. **Build Command**: 
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. **Start Command**:
+   ```bash
+   gunicorn run:app
+   ```
+5. **Database**: Render uses an ephemeral filesystem. For production, consider connecting to a Managed PostgreSQL instance or using a persistent disk if you want to keep the SQLite `instance/` folder.
+
 ## 👤 User Directory & Credentials
 
 ### 🌟 Admin Access
