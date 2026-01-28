@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+env/
+venv/
+ENV/
+
+# Flask/SQLAlchemy
+instance/
+.env
+*.db
+
+# Excel/Office
+~$*
+*.tmp
+
+# Project Specific
+login_credentials.txt
+verification_output.txt
+admin_dash_check.html
+dashboard_dump.html
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
