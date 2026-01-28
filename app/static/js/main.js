@@ -170,9 +170,9 @@ async function loadJobs() {
                 <p style="font-size: 13px; font-weight: 600;">Min CGPA Requirement: <span style="color: var(--primary-blue);">${job.min_cgpa}</span></p>
             </div>
             ${isStudent ? `
-                <button class="primary" onclick="event.stopPropagation(); applyJob(${job.id})" style="margin-top: 20px; width: 100%;">Apply Now</button>
+                <button class="btn btn-primary" onclick="event.stopPropagation(); applyJob(${job.id})" style="margin-top: 20px; width: 100%;">Apply Now</button>
             ` : `
-                <button class="secondary" style="margin-top: 20px; width: 100%; pointer-events: none; opacity: 0.7;">View Details</button>
+                <button class="btn btn-secondary" style="margin-top: 20px; width: 100%; pointer-events: none; opacity: 0.7;">View Details</button>
             `}
         </div>
     `).join('');
@@ -203,7 +203,7 @@ function viewJobDetails(jobId) {
         </div>
 
         ${isStudent ? `
-            <button class="primary" onclick="applyJob(${job.id})" style="width: 100%;">Apply for this Position</button>
+            <button class="btn btn-primary" onclick="applyJob(${job.id})" style="width: 100%;">Apply for this Position</button>
         ` : ''}
     `;
 
