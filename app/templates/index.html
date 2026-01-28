@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="hero-content">
+        <h1>Explore Your Potential with NILGIRI COLLEGE</h1>
+        <p>
+            Scripting success stories of growth and innovation for over a decade.
+            Join the elite circle of professionals through our dedicated career and placement portal.
+        </p>
+        <div style="display: flex; justify-content: center; gap: 20px;">
+            <a href="{{ url_for('main.jobs_page') }}" class="btn btn-primary" style="padding: 15px 40px;">Explore
+                Opportunities</a>
+            <a href="{{ url_for('main.portfolio_page') }}" class="btn btn-secondary"
+                style="padding: 14px 40px; background: transparent; border: 2px solid white; color: white;">Update
+                Portfolio</a>
+        </div>
+    </div>
+</section>
+
+<section class="stats-section">
+    <div class="stat-card">
+        <h2>100%</h2>
+        <p>Placement Support</p>
+    </div>
+    <div class="stat-card">
+        <h2>500+</h2>
+        <p>Corporate Partners</p>
+    </div>
+    <div class="stat-card">
+        <h2>A++</h2>
+        <p>NAAC Accreditation</p>
+    </div>
+    <div class="stat-card">
+        <h2>10Y+</h2>
+        <p>Academic Excellence</p>
+    </div>
+</section>
+
+<div class="container section-spacer">
+    <h2 class="section-title">Placement Success Stories</h2>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; margin-bottom: 80px;">
+        <div class="home-image-container">
+            <img src="{{ url_for('static', filename='img/placement_team.png') }}" alt="Placement Success"
+                style="width: 100%; border-radius: 12px; box-shadow: var(--shadow);">
+        </div>
+        <div class="home-content">
+            <p>
+                The Placement Cell at Nilgiri College of Arts and Science plays a vital role in bridging the gap between
+                academia and industry.
+                We organize campus interviews with top-tier national and international companies, ensuring our students
+                transition smoothly into
+                their professional careers.
+            </p>
+            <p>
+                Our mission is to offer 100 percent placement through dedication and complete involvement in student
+                development.
+            </p>
+            <ul style="list-style: none; padding: 0; margin-top: 20px;">
+                <li style="margin-bottom: 10px;"><strong style="color: var(--secondary-teal);">✓</strong> Personalized
+                    Career Counseling</li>
+                <li style="margin-bottom: 10px;"><strong style="color: var(--secondary-teal);">✓</strong> Soft Skills &
+                    Personality Development</li>
+                <li style="margin-bottom: 10px;"><strong style="color: var(--secondary-teal);">✓</strong>
+                    Industry-standard Mock Interviews</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2 class="section-title">Our Recruitment Partners</h2>
+    <div style="display: flex; justify-content: center;">
+        <img src="{{ url_for('static', filename='img/partners.png') }}" alt="Recruitment Partners"
+            style="width: 100%; max-width: 1000px; opacity: 0.9;">
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+# 🎓 Career Grid
+A modern, sleek Placement Management System built with **Flask** and **SQLAlchemy**, tailored for **Nilgiri College**.
+
+Career Grid streamlines the placement process by providing distinct portals for students and recruiters. It features a robust Role-Based Access Control (RBAC) system to ensure secure interactions and academic-centric portfolio management.
+
+## ✨ Key Features
+
+### 🎨 User Interface
+- **Premium Design**: A high-end aesthetic matching the Nilgiri College brand.
+- **Role-Based Dashboards**: Tailored experiences for Students and Admins based on their specific activities.
+- **Mobile First**: Fully responsive layout optimized for all device sizes.
+- **Micro-interactions**: Smooth transitions and hover effects for an engaging experience.
+
+### 🔐 Access Control
+- **Institutional Enrollment Only**: Public signup is disabled; students are added via controlled administrative flows.
+- **Secure First Login**: Mandatory password change for all initial student accounts to ensure individual security.
+- **Enhanced RBAC**: Restricted page access using bespoke decorators (`@admin_required`, `@superadmin_required`).
+- **Secure Sessions**: Powered by `Flask-Login` with encrypted password hashing.
+
+### 📚 Modules
+- **Admin Management**: Bulk student enrollment via Excel (.xlsx) upload.
+- **Job & Internship Board**: Centralized repository for all career opportunities.
+- **Student Portfolio**: Professional academic records including CGPA and skill tracking.
+- **Placement Chatbot**: AI-powered FAQ assistant for career guidance.
+
+## 🛠️ Tech Stack
+- **Backend**: Python, Flask, Jinja2
+- **Data Processing**: Pandas, OpenPyxl (for Excel automation)
+- **Database**: SQLite (Dev), SQLAlchemy (ORM)
+- **Frontend**: Vanilla JavaScript, CSS3 (Modern Flexbox/Grid)
+- **Security**: PBKDF2 Password Hashing
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.8 or higher
+- pip (Python Package Installer)
+
+### Installation
+
+1. **Clone the Repository**
+   ```bash
+   git clone <repository-url>
+   cd career_grid
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   py -m pip install flask flask-sqlalchemy flask-login requests pandas openpyxl
+   ```
+
+3. **Initialize Database & Seed Admin**
+   ```bash
+   py scripts/reset_db.py
+   ```
+   *Note: This script initializes the schema and creates the Super Admin account.*
+
+4. **Run the Application**
+   ```bash
+   py run.py
+   ```
+   Visit `http://127.0.0.1:5000` in your browser.
+
+## 👤 User Directory & Credentials
+
+### 🌟 Admin Access
+| Role | Email | Password | Access Level |
+| :--- | :--- | :--- | :--- |
+| **Super Admin** | `superadmin@nilgiricollege.ac.in` | `superadmin123` | Full System Control & Data Upload |
+
+### 📥 Student Enrollment Flow
+1. **Admin** uploads a student master list (Excel) via the Admin Dashboard.
+2. **Students** receive a temporary password (`password123`).
+3. **On First Login**, students are redirected to set a unique personal password.
+
+## 📂 Project Structure
+```text
+career_grid/
+├── app/               # Flask Application & Core Logic
+│   ├── static/        # CSS, JS, and Images
+│   └── templates/     # Jinja2 HTML Templates (Dashboards, Auth)
+├── scripts/           # Utility, Seeding, and Verification scripts
+├── instance/          # Local database storage
+├── config.py          # App configuration
+├── README.md          # Project Documentation
+└── run.py             # Application entry point
+```

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container section-spacer">
+    <h2 class="section-title">About Career & Placement Cell</h2>
+
+    <div class="card" style="margin-top: 40px;">
+        <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center;">
+            <div>
+                <p style="font-size: 18px; line-height: 1.8; margin-bottom: 25px;">
+                    Established in 2012, <strong>Nilgiri College of Arts and Science</strong> has successfully completed
+                    a decade of rich academic pursuit, scripting success stories of enviable growth and excellence.
+                    The <strong>Career & Placement Cell</strong> is a pivotal department dedicated to bridging the gap
+                    between student potential and industry requirements.
+                </p>
+                <p style="margin-bottom: 20px;">
+                    Our mission is to nurture the true spirit of holistic education and provide a 100% placement
+                    opportunity to every deserving student.
+                    We believe in empowering our students with the skills, confidence, and opportunities needed to
+                    thrive in the competitive global market.
+                </p>
+                <p>
+                    Nestled in a serene village amidst lush green fields, our college stands as a towering epitome of
+                    state-of-the-art facilities, providing an ideal environment for professional growth and career
+                    development.
+                </p>
+            </div>
+            <div style="text-align: center;">
+                <img src="{{ url_for('static', filename='img/workshop.png') }}" alt="Career Workshops"
+                    style="width: 100%; border-radius: 12px; box-shadow: var(--shadow); margin-bottom: 30px;">
+                <div class="placement-badge" style="display: inline-block; font-size: 16px; padding: 15px 30px;">
+                    NAAC A++ ACCREDITED<br>[CGPA 3.59/4]
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; margin-top: 60px;">
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 40px; color: var(--secondary-teal); margin-bottom: 15px;">🎯</div>
+            <h3 style="color: var(--primary-blue);">Mission</h3>
+            <p style="font-size: 14px; color: #666;">To provide comprehensive placement support through
+                industry-benchmarked training and personalized career guidance.</p>
+        </div>
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 40px; color: var(--secondary-teal); margin-bottom: 15px;">👁️</div>
+            <h3 style="color: var(--primary-blue);">Vision</h3>
+            <p style="font-size: 14px; color: #666;">To emerge as an ideal academic and professional destination for
+                students across the globe by achieving excellence in placements.</p>
+        </div>
+        <div class="card" style="text-align: center;">
+            <div style="font-size: 40px; color: var(--secondary-teal); margin-bottom: 15px;">💎</div>
+            <h3 style="color: var(--primary-blue);">Core Values</h3>
+            <p style="font-size: 14px; color: #666;">Integrity, Professionalism, Continuous Learning, and
+                Student-Centric approach in all our career initiatives.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

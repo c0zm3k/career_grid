@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Career Grid - Nilgiri College{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="header-logos">
+            <a href="{{ url_for('main.home_page') }}"
+                style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                <div
+                    style="background: var(--primary-blue); color: white; padding: 5px 10px; border-radius: 4px; font-weight: 800; font-size: 1.2rem;">
+                    CG</div>
+                <span
+                    style="font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; color: var(--primary-blue);">CAREER
+                    GRID</span>
+            </a>
+        </div>
+        <div class="header-right">
+            <img src="https://via.placeholder.com/60x60?text=NAAC+A++" alt="NAAC A++" class="naac-logo">
+            <div class="placement-badge">
+                CAREER &<br>PLACEMENT CELL
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('main.home_page') }}">Home</a></li>
+            <li><a href="{{ url_for('main.about_page') }}">About</a></li>
+            <li><a href="{{ url_for('main.jobs_page') }}">Job & Internships</a></li>
+            <li id="portfolio-nav-link"><a href="{{ url_for('main.portfolio_page') }}">Portfolio</a></li>
+            <li id="dashboard-link" style="display: none;"><a href="#">Dashboard</a></li>
+            <li><a href="{{ url_for('main.login_page') }}" class="login-btn-nav" id="nav-auth-btn">Login</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <div id="toast"></div>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Nilgiri College</h4>
+                <p>Establishing succeess stories of academic pursuit for over a decade. Nestled in a serene village
+                    amidst lush green fields, the college stands as a towering epitome of state-of-the-art facilities.
+                </p>
+                <p style="margin-top: 20px;"><strong>Contact:</strong> +91 92077 66660<br>info@nilgiricollege.ac.in</p>
+            </div>
+            <div class="footer-col" style="text-align: right;">
+                <h4>Quick Links</h4>
+                <p><a href="#" style="color: white; text-decoration: none;">Privacy Policy</a></p>
+                <p><a href="#" style="color: white; text-decoration: none;">Terms of Service</a></p>
+                <p><a href="#" style="color: white; text-decoration: none;">Sitemap</a></p>
+            </div>
+            <div class="footer-col" style="text-align: right;">
+                <h4>Follow Us</h4>
+                <p>Facebook</p>
+                <p>Instagram</p>
+                <p>LinkedIn</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Nilgiri College of Arts & Science (Autonomous). Accredited with A++ grade by NAAC.
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Highlighting active nav link
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('nav ul li a');
+            navLinks.forEach(link => {
+                const linkPath = link.getAttribute('href');
+                if (linkPath === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

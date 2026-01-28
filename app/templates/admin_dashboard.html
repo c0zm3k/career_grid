@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container section-spacer">
+    <h2 class="section-title">Admin Dashboard</h2>
+    <p style="margin-bottom: 40px;">Manage student data, job postings, and track applications.</p>
+
+    <div class="grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 50px;">
+        <div class="card" style="text-align: center; padding: 30px;">
+            <div class="stat-value">{{ stats.total_students }}</div>
+            <div class="stat-label">Total Students</div>
+        </div>
+        <div class="card" style="text-align: center; padding: 30px;">
+            <div class="stat-value">{{ stats.total_jobs }}</div>
+            <div class="stat-label">Active Jobs</div>
+        </div>
+        <div class="card" style="text-align: center; padding: 30px;">
+            <div class="stat-value">{{ stats.total_applications }}</div>
+            <div class="stat-label">Applications</div>
+        </div>
+    </div>
+
+    <div class="grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 30px;">
+        {% if current_user.role == 'admin' %}
+        <div class="card">
+            <h3>Upload Student Data</h3>
+            <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Upload an Excel file (.xlsx) containing
+                columns: <b>email, full_name, department, cgpa, password</b>.</p>
+            <form id="upload-students-form">
+                <div class="form-group">
+                    <input type="file" id="student-excel" accept=".xlsx, .xls" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload Students</button>
+            </form>
+        </div>
+        {% endif %}
+        {% if current_user.role == 'admin' %}
+        <div class="card">
+            <h3>Quick Actions</h3>
+            <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Common administrative tasks.</p>
+            <div style="display: flex; gap: 10px; flex-direction: column;">
+                <a href="{{ url_for('main.jobs_page') }}" class="primary"
+                    style="text-decoration: none; text-align: center;">Post New Job</a>
+                <button class="secondary" onclick="showToast('Feature coming soon!', 'info')">View All
+                    Applications</button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if current_user.role == 'superadmin' and pending_admins %}
+    <div class="card" style="padding: 30px; margin-bottom: 30px; border-left: 5px solid #f39c12;">
+        <div style="margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
+            <h3 style="margin: 0; color: #d35400;">Pending Approvals</h3>
+            <p style="font-size: 13px; color: #666; margin-top: 5px;">New administrator registrations awaiting Super
+                Admin verification.</p>
+        </div>
+        <div class="premium-list">
+            {% for admin in pending_admins %}
+            <div class="list-item"
+                style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #f5f5f5;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div
+                        style="width: 40px; height: 40px; background: #fff3e0; color: #ef6c00; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                        ?</div>
+                    <div>
+                        <div style="font-weight: 600; color: var(--text-dark);">{{ admin.email }}</div>
+                        <div style="font-size: 12px; color: #d32f2f;">Waiting for access...</div>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button class="btn-small primary" onclick="approveAdmin({{ admin.id }})">Approve Access</button>
+                    <button class="btn-small btn-danger" onclick="deleteAdmin({{ admin.id }})">Reject</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="grid-stack">
+        {% if current_user.role == 'superadmin' %}
+        <div class="card" style="padding: 30px;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
+                <h3 style="margin: 0; color: var(--primary-blue);">Active Administrators</h3>
+                <button class="primary" onclick="document.getElementById('add-admin-modal').style.display='flex'">+
+                    Create Admin</button>
+            </div>
+            <div class="premium-list">
+                {% if active_admins %}
+                {% for admin in active_admins %}
+                <div class="list-item"
+                    style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #f5f5f5; transition: background 0.2s;"
+                    onmouseover="this.style.background='#fafafa'" onmouseout="this.style.background='transparent'">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div
+                            style="width: 40px; height: 40px; background: #e3f2fd; color: var(--primary-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                            A</div>
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-dark);">{{ admin.email }}</div>
+                            <div style="font-size: 12px; color: #999;">Administrator Account</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <span class="badge"
+                            style="background: rgba(76, 175, 80, 0.1); color: #388e3c; padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 12px; border: 1px solid rgba(76, 175, 80, 0.2);">Verified
+                            Active</span>
+                        <button class="btn-small secondary"
+                            onclick="openEditAdmin({{ admin.id }}, '{{ admin.email }}')">Edit</button>
+                        <button class="btn-small btn-danger" onclick="deleteAdmin({{ admin.id }})">Delete</button>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p style="text-align: center; color: #999; padding: 20px;">No other administrators yet.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if current_user.role == 'admin' %}
+        <div class="card" style="padding: 30px;">
+            <div style="margin-bottom: 30px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px;">
+                <h3 style="margin: 0; color: var(--primary-blue);">Enrolled Students (Recent)</h3>
+            </div>
+            <div class="premium-list">
+                {% if students %}
+                {% for student in students %}
+                <div class="list-item"
+                    style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #f5f5f5;"
+                    onmouseover="this.style.background='#fafafa'" onmouseout="this.style.background='transparent'">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div
+                            style="width: 40px; height: 40px; background: #e0f2f1; color: var(--secondary-teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                            S</div>
+                        <div>
+                            <div style="font-weight: 600; color: var(--text-dark);">{{ student.profile.full_name if
+                                student.profile else student.email.split('@')[0]|capitalize }}</div>
+                            <div style="font-size: 12px; color: #999;">{{ student.email }}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 40px; text-align: right; align-items: center;">
+                        <div style="text-align: right;">
+                            <div
+                                style="font-size: 10px; text-transform: uppercase; color: #999; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px;">
+                                Department</div>
+                            <div style="font-weight: 600; font-size: 13px; color: var(--text-dark);">{{
+                                student.profile.department if student.profile else 'General' }}</div>
+                        </div>
+                        <div style="min-width: 60px; text-align: right;">
+                            <div
+                                style="font-size: 10px; text-transform: uppercase; color: #999; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px;">
+                                CGPA</div>
+                            <div style="font-weight: 700; font-size: 15px; color: var(--secondary-teal);">{{
+                                student.profile.cgpa if student.profile else '0.0' }}</div>
+                        </div>
+                        <button class="btn-small secondary"
+                            onclick="openEditStudent({{ student.profile.id if student.profile else 0 }}, '{{ student.profile.full_name|escape if student.profile else student.email.split('@')[0]|capitalize }}', '{{ student.profile.department|escape if student.profile else 'General' }}', '{{ student.profile.cgpa if student.profile else '0.0' }}')">
+                            Edit
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p style="text-align: center; color: #999; padding: 20px;">No students enrolled yet.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if current_user.role == 'superadmin' %}
+    <!-- Add Admin Modal -->
+    <div id="add-admin-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+        <div class="card" style="width: 400px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <h3 style="margin: 0;">Create New Admin</h3>
+                <button onclick="document.getElementById('add-admin-modal').style.display='none'"
+                    style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+            </div>
+            <form id="create-admin-form">
+                <div class="form-group">
+                    <label>Admin Email</label>
+                    <input type="email" id="admin-email" required placeholder="admin@nilgiricollege.ac.in">
+                </div>
+                <div class="form-group">
+                    <label>Initial Password</label>
+                    <input type="password" id="admin-password" placeholder="Defaults to admin123">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Admin Modal -->
+    <div id="edit-admin-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+        <div class="card" style="width: 400px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <h3 style="margin: 0;">Update Admin Details</h3>
+                <button onclick="document.getElementById('edit-admin-modal').style.display='none'"
+                    style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+            </div>
+            <form id="edit-admin-form">
+                <input type="hidden" id="edit-admin-id">
+                <div class="form-group">
+                    <label>Admin Email</label>
+                    <input type="email" id="edit-admin-email" required>
+                </div>
+                <div class="form-group">
+                    <label>New Password (Optional)</label>
+                    <input type="password" id="edit-admin-password" placeholder="Leave blank to keep current">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Update Account</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if current_user.role == 'admin' or current_user.role == 'superadmin' %}
+    <!-- Edit Student Modal -->
+    <div id="edit-student-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2005; align-items: center; justify-content: center;">
+        <div class="card" style="width: 400px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <h3 style="margin: 0;">Edit Student Profile</h3>
+                <button onclick="document.getElementById('edit-student-modal').style.display='none'"
+                    style="background: none; border: none; font-size: 20px; cursor: pointer;">&times;</button>
+            </div>
+            <p id="edit-student-name-label" style="font-weight: 700; color: var(--primary-blue); margin-bottom: 20px;">
+            </p>
+            <form id="edit-student-form">
+                <input type="hidden" id="edit-student-id">
+                <div class="form-group">
+                    <label>Department</label>
+                    <input type="text" id="edit-student-dept" required>
+                </div>
+                <div class="form-group">
+                    <label>CGPA</label>
+                    <input type="number" id="edit-student-cgpa" step="0.01" min="0" max="10" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Update Profile</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('upload-students-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const fileInput = document.getElementById('student-excel');
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        const res = await fetch('/admin/upload-students', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+            showToast('Students uploaded successfully!');
+            setTimeout(() => window.location.reload(), 1500);
+        } else {
+            showToast(data.error, 'error');
+        }
+    };
+
+    const createAdminForm = document.getElementById('create-admin-form');
+    if (createAdminForm) {
+        createAdminForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value || 'admin123';
+
+            const res = await fetch('/api/admin/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                showToast('Admin created!');
+                window.location.reload();
+            } else {
+                showToast(data.error, 'error');
+            }
+        };
+    }
+
+    async function approveAdmin(id) {
+        if (!confirm('Approve this administrator account?')) return;
+        const res = await fetch(`/api/admin/approve/${id}`, { method: 'POST' });
+        if (res.ok) {
+            showToast('Admin approved!');
+            window.location.reload();
+        } else {
+            showToast('Approval failed', 'error');
+        }
+    }
+
+    function openEditAdmin(id, email) {
+        document.getElementById('edit-admin-id').value = id;
+        document.getElementById('edit-admin-email').value = email;
+        document.getElementById('edit-admin-modal').style.display = 'flex';
+    }
+
+    document.getElementById('edit-admin-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('edit-admin-id').value;
+        const email = document.getElementById('edit-admin-email').value;
+        const password = document.getElementById('edit-admin-password').value;
+
+        const res = await fetch(`/api/admin/update/${id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (res.ok) {
+            showToast('Admin updated!');
+            window.location.reload();
+        } else {
+            const data = await res.json();
+            showToast(data.error || 'Update failed', 'error');
+        }
+    };
+
+    async function deleteAdmin(id) {
+        if (!confirm('Are you sure you want to delete this admin?')) return;
+        const res = await fetch(`/api/admin/delete/${id}`, { method: 'POST' });
+        const data = await res.json();
+        if (res.ok) {
+            showToast('Admin deleted!');
+            window.location.reload();
+        } else {
+            showToast(data.error, 'error');
+        }
+    }
+
+    function openEditStudent(id, name, dept, cgpa) {
+        document.getElementById('edit-student-id').value = id;
+        document.getElementById('edit-student-name-label').innerText = "Editing: " + name;
+        document.getElementById('edit-student-dept').value = dept;
+        document.getElementById('edit-student-cgpa').value = cgpa;
+        document.getElementById('edit-student-modal').style.display = 'flex';
+    }
+
+    const editStudentForm = document.getElementById('edit-student-form');
+    if (editStudentForm) {
+        editStudentForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-student-id').value;
+            const department = document.getElementById('edit-student-dept').value;
+            const cgpa = document.getElementById('edit-student-cgpa').value;
+
+            const res = await fetch(`/api/admin/student/update/${id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ department, cgpa })
+            });
+
+            if (res.ok) {
+                showToast('Student profile updated!');
+                window.location.reload();
+            } else {
+                const data = await res.json();
+                showToast(data.error || 'Update failed', 'error');
+            }
+        };
+    }
+</script>
+{% endblock %}

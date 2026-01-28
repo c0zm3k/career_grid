@@ -1,0 +1,527 @@
+:root {
+    --primary-blue: #004b93;
+    /* Royal Blue from NC site */
+    --secondary-teal: #26a69a;
+    /* Teal from NC site */
+    --dark-blue: #003366;
+    --light-gray: #f4f7f6;
+    --text-dark: #2c3e50;
+    --text-light: #ecf0f1;
+    --white: #ffffff;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 8px 35px rgba(0, 0, 0, 0.12);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --max-width: 1400px;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--light-gray);
+    color: var(--text-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 5%;
+    box-sizing: border-box;
+}
+
+.section-spacer {
+    padding: 40px 0;
+}
+
+.card {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.grid {
+    display: grid;
+    gap: 30px;
+}
+
+/* Header */
+header {
+    background-color: var(--white);
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+}
+
+.header-logos img {
+    height: 70px;
+    display: block;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.naac-logo {
+    height: 60px;
+}
+
+.placement-badge {
+    background: linear-gradient(135deg, var(--secondary-teal), #00897b);
+    color: var(--white);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.3;
+    box-shadow: 0 4px 10px rgba(38, 166, 154, 0.3);
+}
+
+/* Banner */
+.banner {
+    background: linear-gradient(90deg, var(--primary-blue), #0069d9);
+    color: var(--white);
+    text-align: center;
+    padding: 30px 0;
+    font-size: 38px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    box-shadow: inset 0 -5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation */
+nav {
+    background-color: var(--white);
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 0 5%;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 1200px;
+}
+
+nav ul li {
+    flex: 1;
+    text-align: center;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: var(--primary-blue);
+    padding: 18px 0;
+    display: block;
+    font-weight: 600;
+    font-size: 15px;
+    transition: var(--transition);
+    border-bottom: 3px solid transparent;
+}
+
+nav ul li a:hover {
+    color: var(--secondary-teal);
+    background-color: rgba(38, 166, 154, 0.05);
+}
+
+nav ul li a.active {
+    border-bottom-color: var(--secondary-teal);
+    color: var(--secondary-teal);
+}
+
+.login-btn-nav {
+    background-color: var(--primary-blue) !important;
+    color: var(--white) !important;
+    border-radius: 6px;
+    margin: 10px 15px !important;
+    padding: 8px 30px !important;
+    border-bottom: none !important;
+}
+
+.login-btn-nav:hover {
+    background-color: var(--dark-blue) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 75, 147, 0.2);
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(rgba(0, 75, 147, 0.85), rgba(0, 75, 147, 0.85)), url('https://nilgiricollege.ac.in/assets/img/campus.jpg');
+    background-size: cover;
+    background-position: center;
+    color: var(--white);
+    padding: 100px 10%;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 48px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.hero-content p {
+    font-size: 18px;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    opacity: 0.95;
+}
+
+/* At a Glance Stats */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-top: -50px;
+    padding: 0 10%;
+    position: relative;
+    z-index: 5;
+}
+
+.stat-card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-10px);
+}
+
+.stat-card h2 {
+    color: var(--secondary-teal);
+    font-size: 36px;
+    margin: 0;
+    font-weight: 800;
+}
+
+.stat-card p {
+    color: #666;
+    font-weight: 600;
+    margin: 10px 0 0;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+/* Dashboard Stats Specific */
+.stat-value {
+    color: var(--secondary-teal);
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.stat-label {
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    margin-top: 10px;
+    letter-spacing: 1px;
+    display: block;
+}
+
+.premium-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.list-item:last-child {
+    border-bottom: none !important;
+}
+
+.grid-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Content Sections */
+.section-title {
+    text-align: center;
+    color: var(--primary-blue);
+    font-size: 32px;
+    font-weight: 700;
+    margin: 20px 0 30px;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--secondary-teal);
+    margin: 15px auto 0;
+    border-radius: 2px;
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--primary-blue);
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    transition: var(--transition);
+    box-sizing: border-box;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--secondary-teal);
+    box-shadow: 0 0 0 3px rgba(38, 166, 154, 0.1);
+}
+
+/* Standardized Buttons */
+button,
+.btn {
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 12px 25px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+button.primary,
+.btn-primary {
+    background-color: var(--secondary-teal);
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(38, 166, 154, 0.2);
+}
+
+button.primary:hover,
+.btn-primary:hover {
+    background-color: #00897b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(38, 166, 154, 0.3);
+}
+
+button.secondary,
+.btn-secondary {
+    background-color: var(--light-gray);
+    color: var(--text-dark);
+    border: 1px solid #ddd;
+}
+
+button.secondary:hover,
+.btn-secondary:hover {
+    background-color: #eee;
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background-color: #f44336;
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.2);
+}
+
+.btn-danger:hover {
+    background-color: #d32f2f;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(244, 67, 54, 0.3);
+}
+
+.btn-small {
+    padding: 6px 15px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+button:active,
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Layout Helpers */
+.auth-container {
+    max-width: 450px;
+    margin: 50px auto;
+    background: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.job-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.job-card {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    border-left: 5px solid var(--secondary-teal);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.job-card h3 {
+    margin: 0 0 10px;
+    color: var(--primary-blue);
+}
+
+.job-card .meta {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.job-card p {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.job-card .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(38, 166, 154, 0.1);
+    color: var(--secondary-teal);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-right: 10px;
+}
+
+/* Toast Notification */
+#toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 15px 30px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    z-index: 2000;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: none;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Footer */
+footer {
+    background-color: #1a1a1a;
+    color: var(--white);
+    padding: 60px 10% 30px;
+    margin-top: 80px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 40px;
+}
+
+.footer-col h4 {
+    color: var(--secondary-teal);
+    margin-bottom: 25px;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.footer-col p {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.footer-bottom {
+    border-top: 1px solid #333;
+    padding-top: 30px;
+    text-align: center;
+    font-size: 13px;
+    opacity: 0.6;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 992px) {
+    .stats-section {
+        grid-template-columns: repeat(2, 1fr);
+        margin-top: 20px;
+    }
+
+    .hero-section {
+        padding: 60px 5%;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}

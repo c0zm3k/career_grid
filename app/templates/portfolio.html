@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container section-spacer">
+    <div class="auth-container" style="max-width: 800px; text-align: left; margin: 0 auto;">
+        <h2 class="section-title" style="margin-top: 0; text-align: left;">My Placement Portfolio</h2>
+        <p style="color: #666; margin-bottom: 30px;">Keep your academic and professional details up to date to ensure
+            eligibility for the best opportunities.</p>
+
+        <div
+            style="background: rgba(33, 150, 243, 0.05); border: 1px solid rgba(33, 150, 243, 0.2); padding: 15px; border-radius: 8px; margin-bottom: 30px; display: flex; align-items: center; gap: 12px;">
+            <span style="color: var(--primary-blue); font-size: 20px;">ℹ️</span>
+            <p style="margin: 0; font-size: 14px; color: #555;">Official details (Name, Dept, CGPA) are verified and
+                locked. Contact administration for updates.</p>
+        </div>
+
+        <form id="portfolio-form">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="p-name" readonly
+                        style="background-color: #f9f9f9; color: #888; cursor: not-allowed;">
+                </div>
+                <div class="form-group">
+                    <label>Department</label>
+                    <input type="text" id="p-dept" readonly
+                        style="background-color: #f9f9f9; color: #888; cursor: not-allowed;">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>CGPA</label>
+                <input type="number" id="p-cgpa" readonly
+                    style="background-color: #f9f9f9; color: #888; cursor: not-allowed;">
+            </div>
+            <div class="form-group">
+                <label>Skills (Comma separated)</label>
+                <textarea id="p-skills" rows="3" placeholder="Python, SQL, communication..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Resume Link (PDF URL)</label>
+                <input type="url" id="p-resume" placeholder="https://example.com/resume.pdf">
+            </div>
+            <button type="submit" class="btn btn-primary">Update Portfolio</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', loadPortfolio);
+</script>
+{% endblock %}
