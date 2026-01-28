@@ -21,7 +21,6 @@ Career Grid streamlines the placement process by providing distinct portals for 
 - **Admin Management**: Bulk student enrollment via Excel (.xlsx) upload.
 - **Job & Internship Board**: Centralized repository for all career opportunities.
 - **Student Portfolio**: Professional academic records including CGPA and skill tracking.
-- **Placement Chatbot**: AI-powered FAQ assistant for career guidance.
 
 ## 🛠️ Tech Stack
 - **Backend**: Python, Flask, Jinja2
@@ -80,7 +79,7 @@ Career Grid streamlines the placement process by providing distinct portals for 
 ### 🌟 Admin Access
 | Role | Email | Password | Access Level |
 | :--- | :--- | :--- | :--- |
-| **Super Admin** | `superadmin@nilgiricollege.ac.in` | `superadmin123` | Full System Control & Data Upload |
+| **Super Admin** | `admin@nilgiricollege.ac.in` | `Nilgiri@Admin2026` | Full System Control & Data Upload |
 
 ### 📥 Student Enrollment Flow
 1. **Admin** uploads a student master list (Excel) via the Admin Dashboard.
@@ -90,12 +89,15 @@ Career Grid streamlines the placement process by providing distinct portals for 
 ## 📂 Project Structure
 ```text
 career_grid/
-├── app/               # Flask Application & Core Logic
-│   ├── static/        # CSS, JS, and Images
-│   └── templates/     # Jinja2 HTML Templates (Dashboards, Auth)
-├── scripts/           # Utility, Seeding, and Verification scripts
-├── instance/          # Local database storage
-├── config.py          # App configuration
-├── README.md          # Project Documentation
-└── run.py             # Application entry point
+├── app/                  # Flask Application & Core Logic
+│   ├── static/           # CSS, JS, and Images
+│   └── templates/        # Jinja2 HTML Templates
+├── scripts/              # Utility, Seeding, and Verification scripts
+├── instance/             # Local database storage (SQLite)
+├── .gitignore            # Git exclusion rules
+├── config.py             # App configuration
+├── login_credentials.txt # Registry of test accounts
+├── README.md             # Project Documentation
+├── requirements.txt      # Production dependencies
+└── run.py                # Application entry point (Local Dev)
 ```

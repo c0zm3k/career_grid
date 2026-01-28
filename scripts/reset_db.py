@@ -14,8 +14,8 @@ with app.app_context():
     
     # Re-seed Admin
     print("Seeding Super Admin...")
-    hashed_pw = generate_password_hash('superadmin123', method='pbkdf2:sha256')
-    admin = User(email='superadmin@nilgiricollege.ac.in', password=hashed_pw, role='superadmin', needs_password_change=False, is_approved=True)
+    hashed_pw = generate_password_hash('Nilgiri@Admin2026', method='pbkdf2:sha256')
+    admin = User(email='admin@nilgiricollege.ac.in', password=hashed_pw, role='superadmin', needs_password_change=False, is_approved=True)
     db.session.add(admin)
     db.session.commit()
     print("Database reset and Admin seeded!")
