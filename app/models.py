@@ -21,6 +21,7 @@ class StudentProfile(db.Model):
     full_name = db.Column(db.String(150))
     department = db.Column(db.String(100)) # e.g., Arts, Science
     cgpa = db.Column(db.Float)
+    passing_year = db.Column(db.Integer)   # Graduation Year
     skills = db.Column(db.String(500))     # Comma-separated tags
     resume_link = db.Column(db.String(300)) # URL to PDF
 
@@ -40,3 +41,14 @@ class Application(db.Model):
     job_id = db.Column(db.Integer, db.ForeignKey('job.id'))
     student_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     status = db.Column(db.String(50), default='Applied') # Applied, Shortlisted, Rejected
+
+# Activity Log: Track administrative actions
+class ActivityLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    action = db.Column(db.String(100), nullable=False)
+    details = db.Column(db.String(500))
+    
+    # Relationship to User (the admin who performed the action)
+    user = db.relationship('User', backref='activities')

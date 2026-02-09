@@ -19,7 +19,7 @@ def seed_students(excel_path):
             # Clean columns case-insensitivity
             df.columns = [c.lower().strip() for c in df.columns]
             
-            required_cols = ['email', 'full_name', 'department', 'cgpa', 'password']
+            required_cols = ['email', 'full_name', 'department', 'cgpa', 'passing_year', 'password']
             if not all(col in df.columns for col in required_cols):
                 print(f"Error: Missing columns. Needs {required_cols}")
                 return
@@ -52,7 +52,8 @@ def seed_students(excel_path):
                         user_id=user.id,
                         full_name=str(row['full_name']).strip(),
                         department=str(row['department']).strip(),
-                        cgpa=float(row['cgpa'])
+                        cgpa=float(row['cgpa']),
+                        passing_year=int(row['passing_year'])
                     )
                     db.session.add(profile)
                     added_count += 1
@@ -65,6 +66,7 @@ def seed_students(excel_path):
                         user.profile.full_name = str(row['full_name']).strip()
                         user.profile.department = str(row['department']).strip()
                         user.profile.cgpa = float(row['cgpa'])
+                        user.profile.passing_year = int(row['passing_year'])
                         updated_count += 1
             
             db.session.commit()

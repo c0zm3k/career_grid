@@ -6,24 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Career Grid - Nilgiri College{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block styles %}{% endblock %}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <header>
         <div class="header-logos">
-            <a href="{{ url_for('main.home_page') }}"
-                style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
-                <div
-                    style="background: var(--primary-blue); color: white; padding: 5px 10px; border-radius: 4px; font-weight: 800; font-size: 1.2rem;">
-                    CG</div>
-                <span
-                    style="font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; color: var(--primary-blue);">CAREER
-                    GRID</span>
+            <a href="{{ url_for('main.home_page') }}" class="logo-link">
+                <img src="{{ url_for('static', filename='cdn/college_logo.webp') }}" alt="Nilgiri College Logo"
+                    class="main-logo">
             </a>
+            <img src="{{ url_for('static', filename='cdn/naac_badge.webp') }}" alt="NAAC A++ Badge" class="naac-logo">
         </div>
+
+        <div class="header-center">
+            <h1 class="header-title">CAREER GRID</h1>
+        </div>
+
         <div class="header-right">
-            <img src="https://via.placeholder.com/60x60?text=NAAC+A++" alt="NAAC A++" class="naac-logo">
             <div class="placement-badge">
                 CAREER &<br>PLACEMENT CELL
             </div>

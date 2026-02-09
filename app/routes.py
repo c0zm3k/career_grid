@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for
 from . import db
-from .models import User, Job, StudentProfile, Application
+from .models import User, Job, StudentProfile, Application, ActivityLog
 from flask_login import login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
@@ -172,6 +172,7 @@ def portfolio():
         return jsonify({
             "full_name": profile.full_name,
             "cgpa": profile.cgpa,
+            "passing_year": profile.passing_year,
             "skills": profile.skills,
             "department": profile.department,
             "resume_link": profile.resume_link
@@ -263,7 +264,9 @@ def admin_dashboard():
     elif current_user.role == 'admin':
         students = User.query.filter_by(role='student').limit(50).all()
         
-    return render_template('admin_dashboard.html', stats=stats, active_admins=active_admins, pending_admins=pending_admins, students=students)
+    activities = ActivityLog.query.order_by(ActivityLog.timestamp.desc()).limit(15).all()
+        
+    return render_template('admin_dashboard.html', stats=stats, active_admins=active_admins, pending_admins=pending_admins, students=students, activities=activities)
 
 @main.route('/api/admin/create', methods=['POST'])
 @login_required
@@ -350,7 +353,7 @@ def upload_students():
     if file and (file.filename.endswith('.xlsx') or file.filename.endswith('.xls')):
         try:
             df = pd.read_excel(file)
-            required_cols = ['email', 'full_name', 'department', 'cgpa', 'password']
+            required_cols = ['email', 'full_name', 'department', 'cgpa', 'passing_year', 'password']
             if not all(col in df.columns for col in required_cols):
                 return jsonify({"error": f"Excel must contain columns: {', '.join(required_cols)}"}), 400
             
@@ -369,7 +372,8 @@ def upload_students():
                         user_id=new_user.id,
                         full_name=row['full_name'],
                         department=row['department'],
-                        cgpa=float(row['cgpa'])
+                        cgpa=float(row['cgpa']),
+                        passing_year=int(row['passing_year']) if 'passing_year' in row else None
                     )
                     db.session.add(new_profile)
                 else:
@@ -380,8 +384,19 @@ def upload_students():
                         user.profile.full_name = row['full_name']
                         user.profile.department = row['department']
                         user.profile.cgpa = float(row['cgpa'])
+                        user.profile.passing_year = int(row['passing_year']) if 'passing_year' in row else user.profile.passing_year
             
             db.session.commit()
+            
+            # Log Activity
+            upload_log = ActivityLog(
+                user_id=current_user.id,
+                action='Excel Upload',
+                details=f"Uploaded/Updated {len(df)} students via Excel."
+            )
+            db.session.add(upload_log)
+            db.session.commit()
+
             return jsonify({"message": "Students uploaded/updated successfully!"})
         except Exception as e:
             return jsonify({"error": str(e)}), 500
@@ -401,6 +416,58 @@ def update_student_profile(profile_id):
             profile.cgpa = float(data['cgpa'])
         except (ValueError, TypeError):
             return jsonify({"error": "Invalid CGPA value"}), 400
+    if 'passing_year' in data:
+        try:
+            profile.passing_year = int(data['passing_year'])
+        except (ValueError, TypeError):
+            return jsonify({"error": "Invalid Passing Year value"}), 400
             
     db.session.commit()
     return jsonify({"message": "Student profile updated successfully"})
+
+@main.route('/api/admin/student/create-manual', methods=['POST'])
+@login_required
+@admin_required
+def create_student_manual():
+    data = request.json
+    email = data.get('email', '').strip()
+    full_name = data.get('full_name', '').strip()
+    department = data.get('department', '').strip()
+    cgpa = data.get('cgpa', 0.0)
+    passing_year = data.get('passing_year')
+    password = data.get('password', 'password123').strip()
+
+    if not email or not full_name:
+        return jsonify({"error": "Email and Full Name are required"}), 400
+
+    if User.query.filter_by(email=email).first():
+        return jsonify({"error": "Email already registered"}), 400
+
+    try:
+        hashed_pw = generate_password_hash(password, method='pbkdf2:sha256')
+        new_user = User(email=email, password=hashed_pw, role='student', needs_password_change=True, is_approved=True)
+        db.session.add(new_user)
+        db.session.flush()
+
+        new_profile = StudentProfile(
+            user_id=new_user.id,
+            full_name=full_name,
+            department=department,
+            cgpa=float(cgpa),
+            passing_year=int(passing_year) if passing_year else None
+        )
+        db.session.add(new_profile)
+
+        # Log Activity
+        entry_log = ActivityLog(
+            user_id=current_user.id,
+            action='Manual Student Entry',
+            details=f"Added student: {full_name} ({email})"
+        )
+        db.session.add(entry_log)
+        
+        db.session.commit()
+        return jsonify({"message": "Student added successfully!"})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500

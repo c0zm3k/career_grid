@@ -79,7 +79,7 @@ Career Grid streamlines the placement process by providing distinct portals for 
 ### 🌟 Admin Access
 | Role | Email | Password | Access Level |
 | :--- | :--- | :--- | :--- |
-| **Super Admin** | `admin@nilgiricollege.ac.in` | `Nilgiri@Admin2026` | Full System Control & User Management |
+| **Super Admin** | `superadmin@nilgiricollege.ac.in` | `SuperAdmin@123` | Full System Control & User Management |
 | **Placement Admin** | `admin1@nilgiricollege.ac.in` | `password123` | Student Enrollment & Job Posting |
 
 ### 📥 Student Enrollment Flow

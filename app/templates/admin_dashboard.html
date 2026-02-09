@@ -1,9 +1,18 @@
 {% extends "base.html" %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_tabs.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="container section-spacer">
     <h2 class="section-title">Admin Dashboard</h2>
-    <p style="margin-bottom: 40px;">Manage student data, job postings, and track applications.</p>
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; gap: 20px;">
+        <p style="margin: 0; color: #666;">Manage student data, job postings, and track applications.</p>
+        <button class="btn btn-primary btn-small" onclick="switchTab(event, 'manual-entry')">
+            + Add New Student
+        </button>
+    </div>
 
     <div class="grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 50px;">
         <div class="card" style="text-align: center; padding: 30px;">
@@ -22,16 +31,101 @@
 
     <div class="grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 30px;">
         {% if current_user.role == 'admin' %}
-        <div class="card">
-            <h3>Upload Student Data</h3>
-            <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Upload an Excel file (.xlsx) containing
-                columns: <b>email, full_name, department, cgpa, password</b>.</p>
-            <form id="upload-students-form">
-                <div class="form-group">
-                    <input type="file" id="student-excel" accept=".xlsx, .xls" required>
+        <div class="card" id="student-entry-card" style="padding: 25px;">
+            <div class="tabs-nav">
+                <button class="tab-btn active" onclick="switchTab(event, 'bulk-upload')">Bulk Upload</button>
+                <button class="tab-btn" onclick="switchTab(event, 'manual-entry')">Manual Entry</button>
+            </div>
+
+            <!-- Bulk Upload Tab -->
+            <div id="bulk-upload" class="tab-content active">
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Upload an Excel file (.xlsx) containing
+                    columns: <b>email, full_name, department, cgpa, password</b>.
+                </p>
+
+                <!-- Noticeable Download CTA -->
+                <div
+                    style="background: rgba(38, 166, 154, 0.05); border: 1px dashed var(--secondary-teal); border-radius: 8px; padding: 15px; margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div
+                            style="background: var(--secondary-teal); color: white; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="12" y1="18" x2="12" y2="12"></line>
+                                <polyline points="9 15 12 18 15 15"></polyline>
+                            </svg>
+                        </div>
+                        <div>
+                            <div style="font-weight: 700; color: var(--secondary-teal); font-size: 14px;">Need the
+                                structure?</div>
+                            <div style="font-size: 12px; color: #666;">Get our pre-formatted demo template.</div>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('static', filename='cdn/student_template.xlsx') }}" download
+                        class="btn btn-primary" style="white-space: nowrap; text-decoration: none;">
+                        Download XLSX
+                    </a>
                 </div>
-                <button type="submit" class="btn btn-primary">Upload Students</button>
-            </form>
+                <form id="upload-students-form">
+                    <div class="form-group">
+                        <input type="file" id="student-excel" accept=".xlsx, .xls" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Upload Students</button>
+                </form>
+            </div>
+
+            <!-- Manual Entry Tab -->
+            <div id="manual-entry" class="tab-content">
+                <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Enter student details individually.</p>
+                <form id="manual-student-form">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="manual-name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="manual-email" placeholder="john@example.com" required>
+                    </div>
+                    <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Department</label>
+                            <select id="manual-dept" required>
+                                <option value="">Select Dept</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Commerce">Commerce</option>
+                                <option value="Arts & Media">Arts & Media</option>
+                                <option value="Science">Science</option>
+                                <option value="Management">Management</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Passing Year</label>
+                            <input type="number" id="manual-year" placeholder="2024" min="2000" max="2100" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>CGPA</label>
+                        <input type="number" id="manual-cgpa" step="0.01" min="0" max="10" placeholder="8.5" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Temporary Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="manual-password" value="password123" required>
+                            <span class="password-toggle" onclick="togglePassword('manual-password', this)">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Create Student
+                        Account</button>
+                </form>
+            </div>
         </div>
         {% endif %}
         {% if current_user.role == 'admin' %}
@@ -39,10 +133,10 @@
             <h3>Quick Actions</h3>
             <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Common administrative tasks.</p>
             <div style="display: flex; gap: 10px; flex-direction: column;">
-                <a href="{{ url_for('main.jobs_page') }}" class="primary"
-                    style="text-decoration: none; text-align: center;">Post New Job</a>
-                <button class="secondary" onclick="showToast('Feature coming soon!', 'info')">View All
-                    Applications</button>
+                <button class="btn btn-primary" onclick="switchTab(event, 'manual-entry')" style="width: 100%;">Add New
+                    Student</button>
+                <a href="{{ url_for('main.jobs_page') }}" class="btn btn-secondary" style="text-decoration: none;">Post
+                    New Job</a>
             </div>
         </div>
         {% endif %}
@@ -151,12 +245,19 @@
                         <div style="min-width: 60px; text-align: right;">
                             <div
                                 style="font-size: 10px; text-transform: uppercase; color: #999; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px;">
+                                Year</div>
+                            <div style="font-weight: 700; font-size: 15px; color: var(--primary-blue);">{{
+                                student.profile.passing_year if student.profile else 'N/A' }}</div>
+                        </div>
+                        <div style="min-width: 60px; text-align: right;">
+                            <div
+                                style="font-size: 10px; text-transform: uppercase; color: #999; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px;">
                                 CGPA</div>
                             <div style="font-weight: 700; font-size: 15px; color: var(--secondary-teal);">{{
                                 student.profile.cgpa if student.profile else '0.0' }}</div>
                         </div>
                         <button class="btn-small secondary"
-                            onclick="openEditStudent({{ student.profile.id if student.profile else 0 }}, '{{ student.profile.full_name|escape if student.profile else student.email.split('@')[0]|capitalize }}', '{{ student.profile.department|escape if student.profile else 'General' }}', '{{ student.profile.cgpa if student.profile else '0.0' }}')">
+                            onclick="openEditStudent({{ student.profile.id if student.profile else 0 }}, '{{ student.profile.full_name|escape if student.profile else student.email.split('@')[0]|capitalize }}', '{{ student.profile.department|escape if student.profile else 'General' }}', '{{ student.profile.cgpa if student.profile else '0.0' }}', '{{ student.profile.passing_year if student.profile else '' }}')">
                             Edit
                         </button>
                     </div>
@@ -168,6 +269,45 @@
             </div>
         </div>
         {% endif %}
+
+        <div class="card" style="padding: 25px;">
+            <div style="margin-bottom: 20px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">
+                <h3 style="margin: 0; color: var(--secondary-teal);">System Activity Log</h3>
+            </div>
+            <div style="max-height: 400px; overflow-y: auto; padding-right: 5px;">
+                {% if activities %}
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    {% for log in activities %}
+                    <div style="padding: 12px; background: #fcfcfc; border-radius: 8px; border: 1px solid #f0f0f0;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <span class="badge"
+                                style="font-size: 10px; background: rgba(38, 166, 154, 0.08); color: var(--secondary-teal); border: 1px solid rgba(38, 166, 154, 0.15);">
+                                {{ log.action }}
+                            </span>
+                            <span style="font-size: 11px; color: #999;">{{ log.timestamp.strftime('%d %b, %H:%M')
+                                }}</span>
+                        </div>
+                        <p style="font-size: 13px; color: #333; margin: 0; font-weight: 500;">{{ log.details }}</p>
+                        <p
+                            style="font-size: 11px; color: #888; margin-top: 6px; display: flex; align-items: center; gap: 4px;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            {{ log.user.email if log.user else 'System' }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div style="text-align: center; padding: 40px 20px; color: #999;">
+                    <p style="font-size: 14px;">No recent activities found.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
     {% if current_user.role == 'superadmin' %}
@@ -241,16 +381,42 @@
                     <label>CGPA</label>
                     <input type="number" id="edit-student-cgpa" step="0.01" min="0" max="10" required>
                 </div>
+                <div class="form-group">
+                    <label>Passing Year</label>
+                    <input type="number" id="edit-student-year" min="2000" max="2100" required>
+                </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Update Profile</button>
             </form>
         </div>
     </div>
     {% endif %}
+
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
+    function switchTab(event, tabId) {
+        // Update Buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.innerText.toLowerCase().includes(tabId.split('-')[0])) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Update Content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        document.getElementById(tabId).classList.add('active');
+
+        // Scroll to card if it's NOT a tab button itself
+        if (event && !event.currentTarget.classList.contains('tab-btn')) {
+            document.getElementById('student-entry-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
     document.getElementById('upload-students-form').onsubmit = async (e) => {
         e.preventDefault();
         const fileInput = document.getElementById('student-excel');
@@ -344,11 +510,12 @@
         }
     }
 
-    function openEditStudent(id, name, dept, cgpa) {
+    function openEditStudent(id, name, dept, cgpa, year) {
         document.getElementById('edit-student-id').value = id;
         document.getElementById('edit-student-name-label').innerText = "Editing: " + name;
         document.getElementById('edit-student-dept').value = dept;
         document.getElementById('edit-student-cgpa').value = cgpa;
+        document.getElementById('edit-student-year').value = year;
         document.getElementById('edit-student-modal').style.display = 'flex';
     }
 
@@ -359,11 +526,12 @@
             const id = document.getElementById('edit-student-id').value;
             const department = document.getElementById('edit-student-dept').value;
             const cgpa = document.getElementById('edit-student-cgpa').value;
+            const passing_year = document.getElementById('edit-student-year').value;
 
             const res = await fetch(`/api/admin/student/update/${id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ department, cgpa })
+                body: JSON.stringify({ department, cgpa, passing_year })
             });
 
             if (res.ok) {
@@ -372,6 +540,36 @@
             } else {
                 const data = await res.json();
                 showToast(data.error || 'Update failed', 'error');
+            }
+        };
+    }
+
+    // Handle New Student Entry
+    const manualForm = document.getElementById('manual-student-form');
+    if (manualForm) {
+        manualForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const payload = {
+                full_name: document.getElementById('manual-name').value,
+                email: document.getElementById('manual-email').value,
+                department: document.getElementById('manual-dept').value,
+                passing_year: document.getElementById('manual-year').value,
+                cgpa: document.getElementById('manual-cgpa').value,
+                password: document.getElementById('manual-password').value
+            };
+
+            const res = await fetch('/api/admin/student/create-manual', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                showToast(data.message);
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                showToast(data.error, 'error');
             }
         };
     }

@@ -42,7 +42,7 @@
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; margin-bottom: 80px;">
         <div class="home-image-container">
-            <img src="{{ url_for('static', filename='img/placement_team.png') }}" alt="Placement Success"
+            <img src="{{ url_for('static', filename='cdn/Placement_Success.webp') }}" alt="Placement Success"
                 style="width: 100%; border-radius: 12px; box-shadow: var(--shadow);">
         </div>
         <div class="home-content">
@@ -68,10 +68,37 @@
         </div>
     </div>
 
-    <h2 class="section-title">Our Recruitment Partners</h2>
-    <div style="display: flex; justify-content: center;">
-        <img src="{{ url_for('static', filename='img/partners.png') }}" alt="Recruitment Partners"
-            style="width: 100%; max-width: 1000px; opacity: 0.9;">
+    <div class="partners-carousel" id="partnersCarousel">
+        <div class="carousel-track" id="partnersCarouselTrack">
+            {% set logos = ['accenture.webp', 'amazon.webp', 'deloitte.webp', 'flipkart.svg', 'google.webp',
+            'hcl_tech.webp', 'Infosys.webp', 'meta.webp', 'paytm.webp', 'swiggy.webp', 'tcs.webp', 'zoho.webp'] %}
+            {# Repeated twice for seamless loop #}
+            {% for i in range(2) %}
+            {% for logo in logos %}
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='cdn/' ~ logo) }}" alt="">
+            </div>
+            {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const track = document.getElementById('partnersCarouselTrack');
+        if (track) {
+            track.addEventListener('click', () => {
+                if (!track.classList.contains('paused')) {
+                    track.classList.add('paused');
+                    setTimeout(() => {
+                        track.classList.remove('paused');
+                    }, 10000);
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

@@ -253,6 +253,7 @@ async function loadPortfolio() {
         document.getElementById('p-name').value = data.full_name || '';
         document.getElementById('p-dept').value = data.department || '';
         document.getElementById('p-cgpa').value = data.cgpa || '';
+        document.getElementById('p-year').value = data.passing_year || '';
         document.getElementById('p-skills').value = data.skills || '';
         document.getElementById('p-resume').value = data.resume_link || '';
     }
@@ -264,6 +265,7 @@ async function updatePortfolio(e) {
         full_name: document.getElementById('p-name').value,
         department: document.getElementById('p-dept').value,
         cgpa: parseFloat(document.getElementById('p-cgpa').value),
+        passing_year: document.getElementById('p-year').value,
         skills: document.getElementById('p-skills').value,
         resume_link: document.getElementById('p-resume').value
     };
