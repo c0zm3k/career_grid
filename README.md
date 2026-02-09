@@ -48,11 +48,11 @@ Career Grid streamlines the placement process by providing distinct portals for 
    py -m pip install flask flask-sqlalchemy flask-login requests pandas openpyxl
    ```
 
-3. **Initialize Database & Seed Admin**
+3. **Initialize Database & Seed Content**
    ```bash
-   py scripts/reset_db.py
+   py scripts/reseed_master.py
    ```
-   *Note: This script initializes the schema and creates the Super Admin account.*
+   *Note: This script initializes the schema, seeds the Super Admin, regular admins, and sample jobs.*
 
 4. **Run the Application**
    ```bash
@@ -93,7 +93,7 @@ career_grid/
 ├── app/                  # Flask Application & Core Logic
 │   ├── static/           # CSS, JS, and Images
 │   └── templates/        # Jinja2 HTML Templates
-├── scripts/              # Utility, Seeding, and Verification scripts
+├── scripts/              # Initialization, Seeding, and Optimizations
 ├── instance/             # Local database storage (SQLite)
 ├── .gitignore            # Git exclusion rules
 ├── config.py             # App configuration
